@@ -1,3 +1,5 @@
+```mermaid
+
 erDiagram
     MORADOR ||--|| UNIDADE : "mora em"
     UNIDADE ||--|{ VEICULO : "possui"
