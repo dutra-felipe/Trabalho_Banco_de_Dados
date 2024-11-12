@@ -157,3 +157,5 @@
    - Campos booleanos: DEFAULT TRUE/FALSE
    - Campos de status: primeiro valor da enumeração
    - Datas de registro: data/hora atual
+
+![alt text](./media/image.png)

@@ -1,141 +1,140 @@
-```mermaid
-
 erDiagram
-    UNIDADES ||--|{ MORADORES : possui
-    UNIDADES ||--|{ VEICULOS : possui
-    UNIDADES ||--|{ FATURAS : gera
-    MORADORES ||--|{ AUTORIZACOES_VISITANTES : autoriza
-    VISITANTES ||--|{ AUTORIZACOES_VISITANTES : "é autorizado"
-    MORADORES ||--|{ RESERVAS : realiza
-    AREAS_COMUNS ||--|{ RESERVAS : "é reservada"
-    FATURAS ||--|{ ITENS_FATURA : contém
-    TAXAS ||--|{ ITENS_FATURA : compõe
-    MORADORES ||--|{ OCORRENCIAS : registra
-    FUNCIONARIOS ||--|{ OCORRENCIAS : atende
-    FORNECEDORES ||--|{ CONTRATOS : possui
-    SERVICOS ||--|{ CONTRATOS : especifica
+    MORADOR ||--|| UNIDADE : "mora em"
+    UNIDADE ||--|{ VEICULO : "possui"
+    MORADOR ||--|{ AUTORIZACAO_VISITANTE : "cria"
+    VISITANTE ||--|{ AUTORIZACAO_VISITANTE : "recebe"
+    MORADOR ||--|{ RESERVA : "realiza"
+    RESERVA ||--|| AREA_COMUM : "utiliza"
+    UNIDADE ||--|{ FATURA : "possui"
+    FATURA ||--|{ ITENS_FATURA : "contém"
+    TAXA ||--|{ ITENS_FATURA : "compõe"
+    MORADOR ||--|{ OCORRENCIA : "registra"
+    OCORRENCIA ||--|| FUNCIONARIO : "atende"
+    FORNECEDOR ||--|{ CONTRATO : "possui"
+    CONTRATO ||--|| SERVICO : "especifica"
 
-    UNIDADES {
-        PK id_unidade
-        bloco
-        numero
-        metragem
-        vagas_garagem
+    MORADOR {
+        int id_morador PK
+        int id_unidade FK
+        string nome
+        string cpf
+        string telefone
+        string email
+        date data_cadastro
+        boolean ativo
     }
 
-    MORADORES {
-        PK id_morador
-        FK id_unidade
-        nome
-        cpf
-        email
-        telefone
-        data_cadastro
-        ativo
+    UNIDADE {
+        int id_unidade PK
+        string bloco
+        string numero
+        int metragem
+        int vagas_garagem
     }
 
-    VEICULOS {
-        PK id_veiculo
-        FK id_unidade
-        placa
-        modelo
-        cor
+    VISITANTE {
+        int id_visitante PK
+        string nome
+        string documento
+        string telefone
+        datetime data_cadastro
     }
 
-    VISITANTES {
-        PK id_visitante
-        nome
-        documento
-        telefone
+    AUTORIZACAO_VISITANTE {
+        int id_autorizacao PK
+        int id_morador FK
+        int id_visitante FK
+        datetime data_autorizacao
+        datetime data_validade
     }
 
-    AUTORIZACOES_VISITANTES {
-        PK id_autorizacao
-        FK id_morador
-        FK id_visitante
-        data_autorizacao
-        data_validade
+    AREA_COMUM {
+        int id_area PK
+        string nome
+        int capacidade
+        decimal taxa_uso
+        boolean requer_reserva
     }
 
-    AREAS_COMUNS {
-        PK id_area
-        nome
-        capacidade
-        taxa_uso
-        requer_reserva
+    RESERVA {
+        int id_reserva PK
+        int id_morador FK
+        int id_area FK
+        datetime data_hora_inicio
+        datetime data_hora_fim
+        decimal valor
+        string status
     }
 
-    RESERVAS {
-        PK id_reserva
-        FK id_morador
-        FK id_area
-        data_hora_inicio
-        data_hora_fim
-        valor
-        status
-    }
-
-    TAXAS {
-        PK id_taxa
-        descricao
-        valor_base
-        recorrente
-    }
-
-    FATURAS {
-        PK id_fatura
-        FK id_unidade
-        data_vencimento
-        valor_total
-        status
+    FATURA {
+        int id_fatura PK
+        int id_unidade FK
+        date data_vencimento
+        decimal valor_total
+        string status
     }
 
     ITENS_FATURA {
-        PK id_item
-        FK id_fatura
-        FK id_taxa
-        valor
+        int id_item PK
+        int id_fatura FK
+        int id_taxa FK
+        decimal valor
     }
 
-    FUNCIONARIOS {
-        PK id_funcionario
-        nome
-        cargo
-        data_admissao
-        ativo
+    TAXA {
+        int id_taxa PK
+        string descricao
+        decimal valor_base
+        boolean recorrente
     }
 
-    OCORRENCIAS {
-        PK id_ocorrencia
-        FK id_morador
-        FK id_funcionario
-        data_registro
-        descricao
-        status
-        prioridade
+    OCORRENCIA {
+        int id_ocorrencia PK
+        int id_morador FK
+        int id_funcionario FK
+        datetime data_registro
+        string descricao
+        string status
+        string prioridade
     }
 
-    FORNECEDORES {
-        PK id_fornecedor
-        razao_social
-        cnpj
-        telefone
-        email
+    FUNCIONARIO {
+        int id_funcionario PK
+        string nome
+        string cargo
+        date data_admissao
+        boolean ativo
     }
 
-    SERVICOS {
-        PK id_servico
-        descricao
-        periodicidade
+    FORNECEDOR {
+        int id_fornecedor PK
+        string razao_social
+        string cnpj
+        string telefone
+        string email
     }
 
-    CONTRATOS {
-        PK id_contrato
-        FK id_fornecedor
-        FK id_servico
-        data_inicio
-        data_fim
-        valor
-        status
+    CONTRATO {
+        int id_contrato PK
+        int id_fornecedor FK
+        int id_servico FK
+        date data_inicio
+        date data_fim
+        decimal valor
+        string status
+    }
+
+    SERVICO {
+        int id_servico PK
+        string descricao
+        string periodicidade
+    }
+
+    VEICULO {
+        int id_veiculo PK
+        int id_unidade FK
+        string placa
+        string modelo
+        string cor
     }
 ```
