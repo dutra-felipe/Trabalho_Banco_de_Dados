@@ -7,10 +7,11 @@ column_map_areas_comuns = {
 }
 
 column_map_autorizacoes = {
-    "ID do Morador": "id_morador",
-    "ID do Visitante": "id_visitante",
-    "Data de Autorização": "data_autorizacao",
-    "Data de Validade": "data_validade"
+    "ID Autorização": "a.id_autorizacao",
+    "Morador": "m.nome",
+    "Visitante": "v.nome",
+    "Data de Autorização": "a.data_autorizacao",
+    "Data de Validade": "a.data_validade"
 }
 
 column_map_contratos = {
@@ -44,12 +45,13 @@ column_map_itens_fatura = {
 }
 
 column_map_reservas = {
-    "ID Morador": "id_morador",
-    "ID Área": "id_area",
-    "Hora de Início": "data_hora_inicio",
-    "Hora do Fim": "data_hora_fim",
-    "Valor": "valor", 
-    "Status": "status"
+    "ID Reserva": "r.id_reserva",
+    "Morador": "m.nome",
+    "Área": "a.nome",
+    "Data Início": "r.data_hora_inicio",
+    "Data Fim": "r.data_hora_fim",
+    "Valor": "r.valor",
+    "Status": "r.status"
 }
 
 column_map_servicos = {

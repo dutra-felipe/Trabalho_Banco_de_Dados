@@ -8,7 +8,7 @@ def list_moradores():
     st.subheader("Listagem de Moradores")
 
     # Carregar Unidades disponíveis para o filtro
-    unidades_query = "SELECT id_unidade FROM UNIDADES"
+    unidades_query = "SELECT id_unidade, bloco, numero FROM UNIDADES"
     unidades = run_query(unidades_query)
 
     if not unidades:
@@ -16,7 +16,7 @@ def list_moradores():
         unidade_options = {"Todos": None}
     else:
         unidade_options = {"Todos": None}
-        unidade_options.update({f"{u['id_unidade']}": u['id_unidade'] for u in unidades})
+        unidade_options.update({f"{u['bloco']} - {u['numero']} (ID: {u['id_unidade']})": u['id_unidade'] for u in unidades})
 
     unidade_selecionada = st.selectbox("Filtrar por Unidade", list(unidade_options.keys()))
 
@@ -28,12 +28,17 @@ def list_moradores():
     sort_column_db = column_map_moradores[sort_column]  # Nome da coluna no banco de dados
     sort_order = st.selectbox("Ordem", ["Ascendente", "Descendente"])
 
-    # Montando a consulta com filtros
-    query = "SELECT * FROM MORADORES WHERE 1=1"
+    # Montando a consulta com filtros e JOIN
+    query = """
+        SELECT m.*, u.bloco, u.numero 
+        FROM MORADORES m
+        JOIN UNIDADES u ON m.id_unidade = u.id_unidade
+        WHERE 1=1
+    """
     params = []
 
     if id_unidade_filtro is not None:
-        query += " AND id_unidade = %s"
+        query += " AND m.id_unidade = %s"
         params.append(id_unidade_filtro)
 
     query += f" ORDER BY {sort_column_db} {'ASC' if sort_order == 'Ascendente' else 'DESC'}"
@@ -44,11 +49,12 @@ def list_moradores():
         st.warning("Nenhum morador encontrado.")
         return
 
-    # Exibindo os resultados
+    # Exibindo os resultados com informações da unidade
     for morador in moradores:
         st.write(f"ID: {morador['id_morador']} | Nome: {morador['nome']} | "
                  f"CPF: {morador['cpf']} | Email: {morador['email'] or 'N/A'} | "
-                 f"Telefone: {morador['telefone'] or 'N/A'} | Unidade: {morador['id_unidade']} | "
+                 f"Telefone: {morador['telefone'] or 'N/A'} | "
+                 f"Unidade: {morador['bloco']} - {morador['numero']} (ID: {morador['id_unidade']}) | "
                  f"Ativo: {'Sim' if morador['ativo'] else 'Não'} | "
                  f"Data de Cadastro: {morador['data_cadastro']}")
 
@@ -58,7 +64,7 @@ def add_morador():
     st.subheader("Cadastrar Novo Morador")
 
     # Carregar Unidades disponíveis
-    unidades_query = "SELECT id_unidade FROM UNIDADES"
+    unidades_query = "SELECT id_unidade, bloco, numero FROM UNIDADES"
     unidades = run_query(unidades_query)
 
     if not unidades:
@@ -66,7 +72,7 @@ def add_morador():
         return
 
     # Criar lista de opções para o Selectbox
-    unidade_options = {f"{u['id_unidade']} ": u['id_unidade'] for u in unidades}
+    unidade_options = {f"{u['bloco']} - {u['numero']} (ID: {u['id_unidade']})": u['id_unidade'] for u in unidades}
     unidade_selecionada = st.selectbox("Unidade", list(unidade_options.keys()))
 
     # Entradas do usuário

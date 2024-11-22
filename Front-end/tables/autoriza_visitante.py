@@ -2,6 +2,7 @@ import streamlit as st
 from db import run_query
 from utils import column_map_autorizacoes
 
+
 # Função para listar Autorizações de Visitantes com filtros e ordenação
 def list_autorizacoes():
     st.subheader("Listagem de Autorizações de Visitantes")
@@ -30,16 +31,23 @@ def list_autorizacoes():
     sort_column_db = column_map_autorizacoes[sort_column]
     sort_order = st.selectbox("Ordem", ["Ascendente", "Descendente"])
 
-    # Montando a consulta com filtros
-    query = "SELECT * FROM AUTORIZACOES_VISITANTES WHERE 1=1"
+    # Montando a consulta com JOINs e filtros
+    query = """
+        SELECT a.id_autorizacao, a.data_autorizacao, a.data_validade,
+               m.nome AS nome_morador, v.nome AS nome_visitante
+        FROM AUTORIZACOES_VISITANTES a
+        JOIN MORADORES m ON a.id_morador = m.id_morador
+        JOIN VISITANTES v ON a.id_visitante = v.id_visitante
+        WHERE 1=1
+    """
     params = []
 
     if morador_options[morador_selecionado]:
-        query += " AND id_morador = %s"
+        query += " AND a.id_morador = %s"
         params.append(morador_options[morador_selecionado])
-    
+
     if visitante_options[visitante_selecionado]:
-        query += " AND id_visitante = %s"
+        query += " AND a.id_visitante = %s"
         params.append(visitante_options[visitante_selecionado])
 
     query += f" ORDER BY {sort_column_db} {'ASC' if sort_order == 'Ascendente' else 'DESC'}"
@@ -50,11 +58,14 @@ def list_autorizacoes():
         st.warning("Nenhuma autorização encontrada.")
         return
 
-    # Exibindo os resultados
+    # Exibindo os resultados com nomes
     for autorizacao in autorizacoes:
-        st.write(f"ID: {autorizacao['id_autorizacao']} | Morador: {autorizacao['id_morador']} | "
-                 f"Visitante: {autorizacao['id_visitante']} | Data de Autorização: {autorizacao['data_autorizacao']} | "
-                 f"Validade: {autorizacao['data_validade'] or 'Indeterminada'}")
+        st.write(
+            f"ID: {autorizacao['id_autorizacao']} | Morador: {autorizacao['nome_morador']} | "
+            f"Visitante: {autorizacao['nome_visitante']} | Data de Autorização: {autorizacao['data_autorizacao']} | "
+            f"Validade: {autorizacao['data_validade'] or 'Indeterminada'}"
+        )
+
 
 # Função para adicionar uma nova autorização de visitante
 def add_autorizacao():

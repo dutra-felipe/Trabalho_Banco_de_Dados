@@ -15,12 +15,19 @@ def list_reservas():
     sort_column_db = column_map_reservas[sort_column]  # Nome da coluna no banco de dados
     sort_order = st.radio("Ordem", ["Ascendente", "Descendente"])
 
-    # Montando a consulta com filtros
-    query = "SELECT * FROM RESERVAS WHERE 1=1"
+    # Montando a consulta com filtros e JOINs
+    query = """
+        SELECT r.id_reserva, r.data_hora_inicio, r.data_hora_fim, r.valor, r.status,
+               m.nome AS nome_morador, a.nome AS nome_area
+        FROM RESERVAS r
+        JOIN MORADORES m ON r.id_morador = m.id_morador
+        JOIN AREAS_COMUNS a ON r.id_area = a.id_area
+        WHERE 1=1
+    """
     params = []
 
     if status_filter != "Todos":
-        query += " AND status = %s"
+        query += " AND r.status = %s"
         params.append(status_filter)
 
     query += f" ORDER BY {sort_column_db} {'ASC' if sort_order == 'Ascendente' else 'DESC'}"
@@ -31,12 +38,13 @@ def list_reservas():
         st.warning("Nenhuma reserva encontrada.")
         return
 
-    # Exibindo os resultados
+    # Exibindo os resultados com nomes detalhados
     for reserva in reservas:
         st.write(
-            f"ID: {reserva['id_reserva']} | Morador: {reserva['id_morador']} | Área: {reserva['id_area']} | "
-            f"Início: {reserva['data_hora_inicio']} | Fim: {reserva['data_hora_fim']} | "
-            f"Valor: {reserva['valor'] or 'N/A'} | Status: {reserva['status']}"
+            f"ID: {reserva['id_reserva']} | Morador: {reserva['nome_morador']} | "
+            f"Área: {reserva['nome_area']} | Início: {reserva['data_hora_inicio']} | "
+            f"Fim: {reserva['data_hora_fim']} | Valor: {reserva['valor'] or 'N/A'} | "
+            f"Status: {reserva['status']}"
         )
 
 

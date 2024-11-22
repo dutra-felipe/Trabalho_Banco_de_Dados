@@ -22,10 +22,11 @@ def list_veiculos():
     
     # Realizando a consulta
     query = f"""
-        SELECT v.id_veiculo, v.id_unidade, v.placa, v.modelo, v.cor
+        SELECT v.id_veiculo, v.id_unidade, u.bloco, u.numero, v.placa, v.modelo, v.cor
         FROM VEICULOS v
+        JOIN UNIDADES u ON v.id_unidade = u.id_unidade
         WHERE {filter_query}
-        ORDER BY {sort_column_db}
+        ORDER BY v.{sort_column_db}
     """
     
     veiculos = run_query(query)
@@ -33,7 +34,7 @@ def list_veiculos():
     # Exibindo os veículos
     if veiculos:
         for veiculo in veiculos:
-            st.write(f"ID Veículo: {veiculo['id_veiculo']} | Unidade: {veiculo['id_unidade']} | "
+            st.write(f"ID Veículo: {veiculo['id_veiculo']} | Unidade: Bloco {veiculo['bloco']}, Número {veiculo['numero']} | "
                      f"Placa: {veiculo['placa']} | Modelo: {veiculo['modelo']} | "
                      f"Cor: {veiculo['cor']}")
     else:
@@ -42,9 +43,9 @@ def list_veiculos():
 
 def get_unidades():
     """Consulta os IDs das unidades disponíveis no banco de dados."""
-    query = "SELECT id_unidade FROM UNIDADES ORDER BY id_unidade"
+    query = "SELECT id_unidade, bloco, numero FROM UNIDADES ORDER BY id_unidade"
     unidades = run_query(query)
-    return [u["id_unidade"] for u in unidades] if unidades else []
+    return {f"{u['bloco']}-{u['numero']}": u['id_unidade'] for u in unidades} if unidades else {}
 
 
 # Função para adicionar um novo veículo
@@ -58,7 +59,8 @@ def add_veiculo():
         return
     
     # Seleção de unidade e outros dados
-    id_unidade = st.selectbox("ID da Unidade", unidades_disponiveis)
+    unidade_selecionada = st.selectbox("Unidade", list(unidades_disponiveis.keys()))
+    id_unidade = unidades_disponiveis[unidade_selecionada]  # Obtemos o id_unidade real
     placa = st.text_input("Placa").strip().upper()
     modelo = st.text_input("Modelo").strip()
     cor = st.text_input("Cor").strip()
@@ -74,7 +76,7 @@ def add_veiculo():
             VALUES (%s, %s, %s, %s)
         """
         try:
-            run_query(query, (id_unidade, placa, modelo, cor))
+            run_query(query, (id_unidade, placa, modelo, cor))  # Agora 'id_unidade' é numérico
             st.success("Veículo cadastrado com sucesso!")
         except Exception as e:
             st.error(f"Erro ao cadastrar veículo: {e}")

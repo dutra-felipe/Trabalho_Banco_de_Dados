@@ -36,17 +36,24 @@ def list_contratos():
     sort_order = st.selectbox("Ordem", ["Ascendente", "Descendente"])
 
     # Montar a consulta com filtros
-    query = "SELECT * FROM CONTRATOS WHERE 1=1"
+    query = """
+        SELECT c.id_contrato, f.razao_social, s.descricao, c.data_inicio, c.data_fim, c.valor, c.status
+        FROM CONTRATOS c
+        JOIN FORNECEDORES f ON c.id_fornecedor = f.id_fornecedor
+        JOIN SERVICOS s ON c.id_servico = s.id_servico
+        WHERE 1=1
+    """
     params = []
 
     if id_fornecedor_filtro:
-        query += " AND id_fornecedor = %s"
+        query += " AND c.id_fornecedor = %s"
         params.append(id_fornecedor_filtro)
     if id_servico_filtro:
-        query += " AND id_servico = %s"
+        query += " AND c.id_servico = %s"
         params.append(id_servico_filtro)
 
-    query += f" ORDER BY {sort_column_db} {'ASC' if sort_order == 'Ascendente' else 'DESC'}"
+    # Especificar qual tabela se refere a coluna no ORDER BY
+    query += f" ORDER BY c.{sort_column_db} {'ASC' if sort_order == 'Ascendente' else 'DESC'}"
 
     contratos = run_query(query, params)
 
@@ -56,10 +63,11 @@ def list_contratos():
 
     # Exibindo os resultados
     for contrato in contratos:
-        st.write(f"ID: {contrato['id_contrato']} | Fornecedor: {contrato['id_fornecedor']} | "
-                 f"Serviço: {contrato['id_servico']} | Data Início: {contrato['data_inicio']} | "
+        st.write(f"ID: {contrato['id_contrato']} | Fornecedor: {contrato['razao_social']} | "
+                 f"Serviço: {contrato['descricao']} | Data Início: {contrato['data_inicio']} | "
                  f"Data Fim: {contrato['data_fim'] or 'Indefinida'} | "
                  f"Valor: R${contrato['valor']:.2f} | Status: {contrato['status']}")
+
 
 # Função para adicionar um novo Contrato
 def add_contrato():

@@ -5,9 +5,9 @@ from utils import column_map_faturas
 
 def get_unidades():
     """Consulta os IDs das unidades disponíveis no banco de dados."""
-    query = "SELECT id_unidade FROM UNIDADES ORDER BY id_unidade"
+    query = "SELECT id_unidade, bloco, numero FROM UNIDADES ORDER BY id_unidade"
     unidades = run_query(query)
-    return [u["id_unidade"] for u in unidades] if unidades else []
+    return {f"{u['bloco']}-{u['numero']}": u['id_unidade'] for u in unidades} if unidades else {}
 
 
 def list_faturas():
@@ -30,10 +30,11 @@ def list_faturas():
     
     # Realizando a consulta com a ordenação e filtro aplicados
     query = f"""
-        SELECT f.id_fatura, f.id_unidade, f.data_vencimento, f.valor_total, f.status
+        SELECT f.id_fatura, f.id_unidade, u.bloco, u.numero, f.data_vencimento, f.valor_total, f.status
         FROM FATURAS f
+        JOIN UNIDADES u ON f.id_unidade = u.id_unidade
         WHERE {filter_query}
-        ORDER BY {sort_column_db}
+        ORDER BY f.{sort_column_db}
     """
     
     faturas = run_query(query)
@@ -41,7 +42,7 @@ def list_faturas():
     # Exibindo as faturas
     if faturas:
         for fatura in faturas:
-            st.write(f"ID Fatura: {fatura['id_fatura']} | Unidade: {fatura['id_unidade']} | "
+            st.write(f"ID Fatura: {fatura['id_fatura']} | Unidade: Bloco {fatura['bloco']}, Número {fatura['numero']} | "
                      f"Data Vencimento: {fatura['data_vencimento']} | "
                      f"Valor Total: R${fatura['valor_total']:.2f} | Status: {fatura['status']}")
     else:
@@ -58,7 +59,8 @@ def add_fatura():
         return
 
     # Seleção dos dados da fatura
-    id_unidade = st.selectbox("ID da Unidade", unidades_disponiveis)
+    unidade_selecionada = st.selectbox("Unidade", list(unidades_disponiveis.keys()))
+    id_unidade = unidades_disponiveis[unidade_selecionada]  # Obtemos o id_unidade real
     data_vencimento = st.date_input("Data de Vencimento")
     valor_total = st.number_input("Valor Total", min_value=0.0, format="%.2f")
     status = st.selectbox("Status", ["Pendente", "Paga", "Atrasada"])
