@@ -46,10 +46,10 @@ def add_taxa():
     descricao = st.text_input("Descrição")
     valor_base = st.number_input("Valor Base", min_value=0.0, format="%.2f")
     recorrente = st.selectbox("Recorrente", ["Sim", "Não"])
-    
+
     if st.button("Salvar Taxa"):
         query = """
-            INSERT INTO TAXAS (descricao, valor_base, recorrente) 
+            INSERT INTO TAXAS (descricao, valor_base, recorrente)
             VALUES (%s, %s, %s)
         """
         run_query(query, (descricao, valor_base, True if recorrente == "Sim" else False))

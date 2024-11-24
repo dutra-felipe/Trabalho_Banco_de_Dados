@@ -18,7 +18,7 @@ from tables.contratos import list_contratos, add_contrato
 
 def show_menu():
     st.title("Sistema de Gestão de Condomínios")
-    menu = st.sidebar.selectbox("Menu", ["Áreas Comuns", "Autorização de Visitantes", "Contratos de Serviços", "Faturas", "Fornecedores", "Funcionários", "Itens da Fatura", "Moradores","Ocorrências", "Reservas de Áreas Comuns", "Serviços", "Taxas", "Unidades", "Veículos", "Visitantes"])
+    menu = st.sidebar.selectbox("Menu", ["Áreas Comuns", "Autorização de Visitantes", "Contratos de Serviços", "Faturas", "Fornecedores", "Funcionários", "Itens da Fatura", "Moradores", "Ocorrências", "Reservas de Áreas Comuns", "Serviços", "Taxas", "Unidades", "Veículos", "Visitantes"])
     return menu
 
 
@@ -30,6 +30,7 @@ def handle_areas_comuns():
     elif op == "Listar":
         list_areas_comuns()
 
+
 # Função para lidar com as ações da tabela "Autorização de Visitantes"
 def handle_autorizacoes():
     op = st.radio("Ações", ["Adicionar", "Listar"])
@@ -37,6 +38,7 @@ def handle_autorizacoes():
         add_autorizacao()
     elif op == "Listar":
         list_autorizacoes()
+
 
 # Função para lidar com as ações da tabela "Contratos"
 def handle_contratos():
@@ -46,6 +48,7 @@ def handle_contratos():
     elif op == "Listar":
         list_contratos()
 
+
 # Função para lidar com as ações da tabela "Faturas"
 def handle_faturas():
     op = st.radio("Ações", ["Adicionar", "Listar"])
@@ -53,6 +56,7 @@ def handle_faturas():
         add_fatura()
     elif op == "Listar":
         list_faturas()
+
 
 # Função para lidar com as ações da tabela "Fornecedores"
 def handle_fornecedores():
@@ -62,6 +66,7 @@ def handle_fornecedores():
     elif op == "Listar":
         list_fornecedores()
 
+
 # Função para lidar com as ações da tabela "Funcionários"
 def handle_funcionarios():
     op = st.radio("Ações", ["Adicionar", "Listar"])
@@ -69,6 +74,7 @@ def handle_funcionarios():
         add_funcionario()
     elif op == "Listar":
         list_funcionarios()
+
 
 # Função para lidar com as ações da tabela "Fatura"
 def handle_itens_fatura():
@@ -78,6 +84,7 @@ def handle_itens_fatura():
     elif op == "Listar":
         list_itens_fatura()
 
+
 # Função para lidar com as ações da tabela "Moradores"
 def handle_moradores():
     op = st.radio("Ações", ["Adicionar", "Listar"])
@@ -85,6 +92,7 @@ def handle_moradores():
         add_morador()
     elif op == "Listar":
         list_moradores()
+
 
 # Função para lidar com as ações da tabela "Ocorrências"
 def handle_ocorrencias():
@@ -94,6 +102,7 @@ def handle_ocorrencias():
     elif op == "Listar":
         list_ocorrencias()
 
+
 # Função para lidar com as ações da tabela "Reservas"
 def handle_reservas():
     op = st.radio("Ações", ["Adicionar", "Listar"])
@@ -101,6 +110,7 @@ def handle_reservas():
         add_reserva()
     elif op == "Listar":
         list_reservas()
+
 
 # Função para lidar com as ações da tabela "Serviços"
 def handle_servicos():
@@ -110,6 +120,7 @@ def handle_servicos():
     elif op == "Listar":
         list_servicos()
 
+
 # Função para lidar com as ações da tabela "Moradores"
 def handle_taxas():
     op = st.radio("Ações", ["Adicionar", "Listar"])
@@ -118,12 +129,14 @@ def handle_taxas():
     elif op == "Listar":
         list_taxas()
 
+
 def handle_unidades():
     op = st.radio("Ações", ["Adicionar", "Listar"])
     if op == "Adicionar":
         add_unidade()
     elif op == "Listar":
         list_unidades()
+
 
 # Função para lidar com as ações da tabela "Visitantes"
 def handle_veiculos():
@@ -132,6 +145,7 @@ def handle_veiculos():
         add_veiculo()
     elif op == "Listar":
         list_veiculos()
+
 
 # Função para lidar com as ações da tabela "Visitantes"
 def handle_visitantes():

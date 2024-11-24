@@ -102,7 +102,7 @@ def add_reserva():
             return
 
         query = """
-            INSERT INTO RESERVAS (id_morador, id_area, data_hora_inicio, data_hora_fim, valor, status) 
+            INSERT INTO RESERVAS (id_morador, id_area, data_hora_inicio, data_hora_fim, valor, status)
             VALUES (%s, %s, %s, %s, %s, %s)
         """
         try:

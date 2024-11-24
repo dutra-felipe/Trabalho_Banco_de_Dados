@@ -57,7 +57,7 @@ def add_funcionario():
             return
 
         query = """
-            INSERT INTO FUNCIONARIOS (nome, cargo, data_admissao, ativo) 
+            INSERT INTO FUNCIONARIOS (nome, cargo, data_admissao, ativo)
             VALUES (%s, %s, %s, %s)
         """
         try:

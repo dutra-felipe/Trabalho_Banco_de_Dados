@@ -2,6 +2,7 @@ import streamlit as st
 from db import run_query
 from utils import column_map_fornecedores
 
+
 # Função para listar Fornecedores com filtros e ordenação
 def list_fornecedores():
     st.subheader("Listagem de Fornecedores")
@@ -42,7 +43,7 @@ def add_fornecedor():
             return
 
         query = """
-            INSERT INTO FORNECEDORES (razao_social, cnpj, telefone, email) 
+            INSERT INTO FORNECEDORES (razao_social, cnpj, telefone, email)
             VALUES (%s, %s, %s, %s)
         """
         try:

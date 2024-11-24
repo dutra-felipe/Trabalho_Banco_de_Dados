@@ -2,6 +2,7 @@ import streamlit as st
 from db import run_query
 from utils import column_map_servicos
 
+
 # Função para listar Serviços com filtros e ordenação
 def list_servicos():
     st.subheader("Listagem de Serviços")
@@ -36,7 +37,7 @@ def add_servico():
             return
 
         query = """
-            INSERT INTO SERVICOS (descricao, periodicidade) 
+            INSERT INTO SERVICOS (descricao, periodicidade)
             VALUES (%s, %s)
         """
         try:

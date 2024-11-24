@@ -104,12 +104,12 @@ def add_contrato():
             return
 
         query = """
-            INSERT INTO CONTRATOS (id_fornecedor, id_servico, data_inicio, data_fim, valor, status) 
+            INSERT INTO CONTRATOS (id_fornecedor, id_servico, data_inicio, data_fim, valor, status)
             VALUES (%s, %s, %s, %s, %s, %s)
         """
         try:
             run_query(query, (
-                fornecedor_options[fornecedor_selecionado], 
+                fornecedor_options[fornecedor_selecionado],
                 servico_options[servico_selecionado],
                 data_inicio, data_fim, valor, status
             ))

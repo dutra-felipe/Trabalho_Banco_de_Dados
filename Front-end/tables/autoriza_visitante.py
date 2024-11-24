@@ -104,7 +104,7 @@ def add_autorizacao():
             return
 
         query = """
-            INSERT INTO AUTORIZACOES_VISITANTES (id_morador, id_visitante, data_validade) 
+            INSERT INTO AUTORIZACOES_VISITANTES (id_morador, id_visitante, data_validade)
             VALUES (%s, %s, %s)
         """
         try:

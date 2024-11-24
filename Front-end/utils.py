@@ -35,7 +35,7 @@ column_map_fornecedores = {
     "Razão Social": "razao_social",
     "CNPJ": "cnpj",
     "Telefone": "telefone",
-    "Email": "email" 
+    "Email": "email"
 }
 
 column_map_itens_fatura = {

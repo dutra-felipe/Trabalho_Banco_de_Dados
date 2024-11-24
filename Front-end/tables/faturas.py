@@ -12,7 +12,7 @@ def get_unidades():
 
 def list_faturas():
     st.subheader("Listagem de Faturas")
-    
+
     # Filtrando com base no ID da unidade (filtro opcional)
     filtro_unidade = st.number_input("Filtrar por ID da Unidade", min_value=0, step=1, value=0)
 
@@ -20,14 +20,14 @@ def list_faturas():
     filter_conditions = []
     if filtro_unidade > 0:
         filter_conditions.append(f"f.id_unidade = {filtro_unidade}")
-    
+
     # Convertendo o filtro para uma consulta SQL
     filter_query = " AND ".join(filter_conditions) if filter_conditions else "1"
 
     # Exibindo as opções de ordenação
     sort_column = st.selectbox("Ordenar por", list(column_map_faturas.keys()))
     sort_column_db = column_map_faturas[sort_column]  # Convertendo para o nome da coluna no banco de dados
-    
+
     # Realizando a consulta com a ordenação e filtro aplicados
     query = f"""
         SELECT f.id_fatura, f.id_unidade, u.bloco, u.numero, f.data_vencimento, f.valor_total, f.status
@@ -36,7 +36,7 @@ def list_faturas():
         WHERE {filter_query}
         ORDER BY f.{sort_column_db}
     """
-    
+
     faturas = run_query(query)
 
     # Exibindo as faturas
@@ -51,7 +51,7 @@ def list_faturas():
 
 def add_fatura():
     st.subheader("Cadastrar Nova Fatura")
-    
+
     # Consultar unidades disponíveis
     unidades_disponiveis = get_unidades()
     if not unidades_disponiveis:
@@ -64,15 +64,15 @@ def add_fatura():
     data_vencimento = st.date_input("Data de Vencimento")
     valor_total = st.number_input("Valor Total", min_value=0.0, format="%.2f")
     status = st.selectbox("Status", ["Pendente", "Paga", "Atrasada"])
-    
+
     if st.button("Salvar Fatura"):
         # Validação básica
         if not (id_unidade and data_vencimento and valor_total > 0):
             st.error("Todos os campos obrigatórios devem ser preenchidos corretamente.")
             return
-        
+
         query = """
-            INSERT INTO FATURAS (id_unidade, data_vencimento, valor_total, status) 
+            INSERT INTO FATURAS (id_unidade, data_vencimento, valor_total, status)
             VALUES (%s, %s, %s, %s)
         """
         try:

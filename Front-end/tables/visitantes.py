@@ -46,7 +46,7 @@ def add_visitante():
             return
 
         query = """
-            INSERT INTO VISITANTES (nome, documento, telefone) 
+            INSERT INTO VISITANTES (nome, documento, telefone)
             VALUES (%s, %s, %s)
         """
         try:

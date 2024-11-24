@@ -30,7 +30,7 @@ def list_moradores():
 
     # Montando a consulta com filtros e JOIN
     query = """
-        SELECT m.*, u.bloco, u.numero 
+        SELECT m.*, u.bloco, u.numero
         FROM MORADORES m
         JOIN UNIDADES u ON m.id_unidade = u.id_unidade
         WHERE 1=1
@@ -91,7 +91,7 @@ def add_morador():
             return
 
         query = """
-            INSERT INTO MORADORES (id_unidade, nome, cpf, email, telefone, ativo) 
+            INSERT INTO MORADORES (id_unidade, nome, cpf, email, telefone, ativo)
             VALUES (%s, %s, %s, %s, %s, %s)
         """
         try:

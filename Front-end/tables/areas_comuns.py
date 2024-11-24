@@ -2,6 +2,7 @@ import streamlit as st
 from db import run_query
 from utils import column_map_areas_comuns
 
+
 # Função para listar Áreas Comuns com filtros e ordenação
 def list_areas_comuns():
     st.subheader("Listagem de Áreas Comuns")
@@ -27,6 +28,7 @@ def list_areas_comuns():
             f"Necessidade de Reserva: {'Sim' if area['requer_reserva'] else 'Não'}"
         )
 
+
 # Função para adicionar uma nova área comum
 def add_area_comum():
     st.subheader("Cadastrar Nova Área Comum")
@@ -45,7 +47,7 @@ def add_area_comum():
             return
 
         query = """
-            INSERT INTO AREAS_COMUNS (nome, capacidade, taxa_uso, requer_reserva) 
+            INSERT INTO AREAS_COMUNS (nome, capacidade, taxa_uso, requer_reserva)
             VALUES (%s, %s, %s, %s)
         """
         try:

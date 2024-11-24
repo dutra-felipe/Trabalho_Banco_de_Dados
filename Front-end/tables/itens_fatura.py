@@ -1,6 +1,7 @@
 import streamlit as st
 from db import run_query
 
+
 # Função para adicionar um novo item de fatura
 def add_item_fatura():
     st.subheader("Adicionar Item à Fatura")
@@ -25,11 +26,12 @@ def add_item_fatura():
     if st.button("Adicionar Item"):
         id_taxa = int(taxa_selecionada.split(" - ")[0])  # Pega o ID da taxa selecionada
         query = """
-            INSERT INTO ITENS_FATURA (id_fatura, id_taxa, valor) 
+            INSERT INTO ITENS_FATURA (id_fatura, id_taxa, valor)
             VALUES (%s, %s, %s)
         """
         run_query(query, (fatura_selecionada, id_taxa, valor))
         st.success("Item adicionado à fatura com sucesso!")
+
 
 # Função para listar os itens de fatura com filtros
 def list_itens_fatura():
@@ -48,7 +50,7 @@ def list_itens_fatura():
     if filtro_fatura != "Todos":
         query += " AND id_fatura = %s"
         params.append(filtro_fatura)
-    
+
     if filtro_taxa != "Todos":
         query += " AND id_taxa = %s"
         params.append(filtro_taxa)

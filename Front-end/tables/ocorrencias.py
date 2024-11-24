@@ -76,7 +76,7 @@ def add_ocorrencia():
 
     # Inputs do formulário
     id_morador = st.selectbox("Morador", moradores, format_func=lambda x: x["nome"])
-    id_funcionario = st.selectbox("Funcionário (Opcional)", [{"id": None, "nome": "Nenhum"}] + funcionarios, 
+    id_funcionario = st.selectbox("Funcionário (Opcional)", [{"id": None, "nome": "Nenhum"}] + funcionarios,
                                   format_func=lambda x: x["nome"])
     descricao = st.text_area("Descrição", max_chars=500)
     prioridade = st.selectbox("Prioridade", ["Baixa", "Média", "Alta"])

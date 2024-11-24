@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 
+
 # Função para conectar ao banco de dados
 def connect_to_db():
     try:
@@ -16,6 +17,7 @@ def connect_to_db():
     except Error as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
         return None
+
 
 # Função para executar uma consulta
 def run_query(query, params=None):
